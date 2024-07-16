@@ -5,7 +5,7 @@
   <title>Consulta de Débitos</title>
   <style>
     #consultaForm {
-      background-color: rgb(250, 210, 217, .4);
+      background-color: rgba(250, 210, 217, 0.4);
       border: 1px solid #c4c4c4;
       border-radius: 0.375rem;
       padding: 20px;
@@ -138,7 +138,6 @@
       }
     });
 
-    // Adiciona classe 'error' ao input se houver erro
     document.getElementById("email").addEventListener("input", function () {
       this.classList.remove("error");
       document.getElementById("emailError").textContent = "";
