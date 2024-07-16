@@ -125,15 +125,37 @@
           encodeURIComponent(email) +
           "&utmProtocolSource=landing&storeId=671&hidden_modal_campaign=false";
 
-        // Limpar QR code anterior
-        var qrcodeDiv = document.getElementById("qrcode");
-        qrcodeDiv.innerHTML = "";
+        // Usar a API do TinyURL para encurtar a URL
+        fetch('https://api.tinyurl.com/create', {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer pCIEJI4nOtnJUQpAx4gzVhTJTMjaH3khxB1FWQ94CwFRKPq0laLn66notoGl',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            url: url,
+            domain: 'tinyurl.com'
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.data && data.data.tiny_url) {
+            var shortUrl = data.data.tiny_url;
 
-        // Gerar novo QR code
-        var qrcode = new QRCode(qrcodeDiv, {
-          text: url,
-          width: 128,
-          height: 128,
+            // Limpar QR code anterior
+            var qrcodeDiv = document.getElementById("qrcode");
+            qrcodeDiv.innerHTML = "";
+
+            // Gerar novo QR code
+            var qrcode = new QRCode(qrcodeDiv, {
+              text: shortUrl,
+              width: 128,
+              height: 128,
+            });
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
         });
       }
     });
