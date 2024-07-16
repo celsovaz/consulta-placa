@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Consulta de Débitos</title>
+  <style>
+    #consultaForm {
+      background-color: rgb(250, 210, 217, .4);
+      border: 1px solid #c4c4c4;
+      border-radius: 0.375rem;
+      padding: 20px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .search-widget label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    .search-widget input[type="email"],
+    .search-widget input[type="text"],
+    .search-widget button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 8px;
+      background-color: #f8f8f8;
+      border: 1px solid #c4c4c4;
+      border-radius: 0.375rem;
+      box-sizing: border-box;
+      font-size: 0.875rem;
+      transition: border-color 0.3s;
+      outline: none;
+    }
+
+    .search-widget input[type="email"]:focus,
+    .search-widget input[type="text"]:focus {
+      border-color: #ff0060;
+    }
+
+    .search-widget input[type="email"].error,
+    .search-widget input[type="text"].error {
+      border-color: #e53e3e;
+    }
+
+    .search-widget button {
+      background-color: #ff0060;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      border-radius: 2rem;
+      font-size: 0.875rem;
+      font-weight: bold;
+    }
+
+    .search-widget button:hover {
+      opacity: 0.7;
+    }
+
+    .error-message {
+      color: #e53e3e;
+      font-size: 0.875rem;
+      margin-bottom: 8px;
+    }
+
+    #qrcode {
+      margin-top: 20px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h4>Consulte sua placa grátis</h4>
+  <form id="consultaForm" class="search-widget">
+    <label for="email">E-mail:</label>
+    <input type="email" id="email" name="email" />
+    <div id="emailError" class="error-message"></div>
+
+    <label for="placa">Placa:</label>
+    <input type="text" id="placa" name="placa" maxlength="7" />
+    <div id="placaError" class="error-message"></div>
+
+    <button type="submit">Consultar Débitos</button>
+  </form>
+
+  <div id="qrcode"></div>
+
+  <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+  <script>
+    document.getElementById("consultaForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      var email = document.getElementById("email").value;
+      var placa = document.getElementById("placa").value;
+
+      var emailError = document.getElementById("emailError");
+      var placaError = document.getElementById("placaError");
+
+      emailError.textContent = "";
+      placaError.textContent = "";
+
+      var isValid = true;
+
+      if (!email) {
+        emailError.textContent = "E-mail é obrigatório";
+        isValid = false;
+      }
+
+      if (!placa) {
+        placaError.textContent = "Placa é obrigatória";
+        isValid = false;
+      } else if (placa.length > 7) {
+        placaError.textContent = "A placa deve ter no máximo 7 caracteres.";
+        isValid = false;
+      } else if (!/^[A-Za-z0-9]+$/.test(placa)) {
+        placaError.textContent = "Formato de placa inválido";
+        isValid = false;
+      }
+
+      if (isValid) {
+        var url =
+          "https://app.usezapay.com.br/consultar-debitos?utm_source=afiliado&utm_medium=teste&licensePlate=" +
+          encodeURIComponent(placa) +
+          "&email=" +
+          encodeURIComponent(email) +
+          "&utmProtocolSource=landing&storeId=671&hidden_modal_campaign=false";
+
+        // Limpar QR code anterior
+        var qrcodeDiv = document.getElementById("qrcode");
+        qrcodeDiv.innerHTML = "";
+
+        // Gerar novo QR code
+        var qrcode = new QRCode(qrcodeDiv, {
+          text: url,
+          width: 128,
+          height: 128,
+        });
+      }
+    });
+
+    // Adiciona classe 'error' ao input se houver erro
+    document.getElementById("email").addEventListener("input", function () {
+      this.classList.remove("error");
+      document.getElementById("emailError").textContent = "";
+    });
+
+    document.getElementById("placa").addEventListener("input", function () {
+      this.classList.remove("error");
+      document.getElementById("placaError").textContent = "";
+    });
+  </script>
+</body>
+</html>
