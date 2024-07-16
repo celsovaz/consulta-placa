@@ -72,9 +72,32 @@
       margin-top: 20px;
     }
 
+    .section {
+      margin-bottom: 20px;
+      padding: 10px;
+    }
+
+    .section h2 {
+      margin: 0;
+    }
+
+    .section + .section {
+      border-top: 4px solid #FF0060;
+    }
+
     #qrcode {
       margin-top: 20px;
       text-align: center;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .footer img {
+      max-width: 150px;
+      height: auto;
     }
   </style>
 </head>
@@ -112,8 +135,11 @@
       <p>O veículo foi inspecionado e está em conformidade com os requisitos de segurança e legais.</p>
     </div>
 
-    <p>Pague seus débitos e mantenha seu veículo regularizado.</p>
+    <p><strong>Parcele seu débito veicular em até 12x pagando com a Zapay!</strong></p>
     <div id="qrcode"></div>
+    <div class="footer">
+      <img src="https://www.zapay.com.br/assets/img/logo.png" alt="Logo Zapay">
+    </div>
   </div>
 
   <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
