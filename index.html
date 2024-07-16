@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Consulta de Débitos</title>
+  <title>Gerar Laudo de Vistoria Cautelar</title>
   <style>
     #consultaForm {
       background-color: rgba(250, 210, 217, 0.4);
@@ -63,6 +63,15 @@
       margin-bottom: 8px;
     }
 
+    #laudo {
+      display: none;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin-top: 20px;
+    }
+
     #qrcode {
       margin-top: 20px;
       text-align: center;
@@ -80,10 +89,32 @@
     <input type="text" id="placa" name="placa" maxlength="7" />
     <div id="placaError" class="error-message"></div>
 
-    <button type="submit">Consultar Débitos</button>
+    <button type="submit">Gerar Laudo</button>
   </form>
 
-  <div id="qrcode"></div>
+  <div id="laudo">
+    <h1>Laudo de Vistoria Cautelar Veicular</h1>
+    <div class="section">
+      <h2>Informações do Veículo</h2>
+      <p><strong>Marca:</strong> <span id="marca">Toyota</span></p>
+      <p><strong>Modelo:</strong> <span id="modelo">Corolla</span></p>
+      <p><strong>Ano:</strong> <span id="ano">2020</span></p>
+      <p><strong>Placa:</strong> <span id="placa-laudo"></span></p>
+    </div>
+    <div class="section">
+      <h2>Detalhes da Vistoria</h2>
+      <p><strong>Data da Vistoria:</strong> <span id="data-vistoria">16 de julho de 2024</span></p>
+      <p><strong>Responsável:</strong> <span id="responsavel">João da Silva</span></p>
+      <p><strong>Observações:</strong> <span id="observacoes">Veículo em ótimo estado. Sem sinais de sinistros.</span></p>
+    </div>
+    <div class="section">
+      <h2>Conclusão</h2>
+      <p>O veículo foi inspecionado e está em conformidade com os requisitos de segurança e legais.</p>
+    </div>
+
+    <p>Pague seus débitos e mantenha seu veículo regularizado.</p>
+    <div id="qrcode"></div>
+  </div>
 
   <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
   <script>
@@ -142,16 +173,18 @@
           if (data.data && data.data.tiny_url) {
             var shortUrl = data.data.tiny_url;
 
-            // Limpar QR code anterior
+            // Gerar o QR code com a URL encurtada
             var qrcodeDiv = document.getElementById("qrcode");
             qrcodeDiv.innerHTML = "";
-
-            // Gerar novo QR code
-            var qrcode = new QRCode(qrcodeDiv, {
+            new QRCode(qrcodeDiv, {
               text: shortUrl,
               width: 128,
               height: 128,
             });
+
+            // Exibir o laudo
+            document.getElementById("placa-laudo").textContent = placa;
+            document.getElementById("laudo").style.display = "block";
           }
         })
         .catch(error => {
